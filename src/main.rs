@@ -200,7 +200,13 @@ impl GuessHistory {
             .get_colors_index(self.count() - 1)
             .expect("can not get colors")
             .iter()
-            .all(|c| *c == Color::Green);
+            .all(|c| {
+                *c == Color::Rgb {
+                    r: 173,
+                    g: 247,
+                    b: 182,
+                }
+            });
     }
 
     pub fn print_statistics(&self) {
