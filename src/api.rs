@@ -13,7 +13,7 @@ pub fn today() -> Result<Daily> {
         .map_err(|err| err.into())
 }
 
-pub fn previous() -> Result<Previous> {
+pub fn _previous() -> Result<Previous> {
     reqwest::blocking::get("https://wordle-backend.orhanbalci.workers.dev/word/previous/tr")?
         .json::<Previous>()
         .map_err(|err| err.into())

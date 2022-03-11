@@ -9,5 +9,5 @@ pub fn meaning(word: &str) -> Result<String> {
         .and_then(|meanings| meanings.get(0))
         .and_then(|meaning| meaning.get("anlam"))
         .map_or(String::new(), |result| result.to_string());
-    return Ok(result);
+    Ok(result)
 }

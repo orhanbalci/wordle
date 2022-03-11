@@ -33,12 +33,9 @@ fn main() {
                 if gh.is_won() {
                     println!("Tebrikler kelimeyi doğru tahmin ettiniz");
                     println!(
-                        "{}",
-                        format!(
-                            "{}: {}",
-                            &todays_puzzle.word,
-                            tdk_api::meaning(&todays_puzzle.word).unwrap_or_default()
-                        )
+                        "{}: {}",
+                        &todays_puzzle.word,
+                        tdk_api::meaning(&todays_puzzle.word).unwrap_or_default()
                     );
                     gh.print_statistics();
                 }
@@ -86,12 +83,12 @@ fn update_dictionary() -> Result<bool, Errors> {
                 File::create(data_local).map_err(|_e| Errors::DictionaryFileNotCreated)?;
             file.write_all(file_content.as_bytes())
                 .map_err(|_e| Errors::DictionaryFileNotWritten)?;
-            return Ok(true);
+            Ok(true)
         } else {
-            return Err(Errors::DataLocalNotFound);
+            Err(Errors::DataLocalNotFound)
         }
     } else {
-        return Ok(false);
+        Ok(false)
     }
 }
 
@@ -102,11 +99,11 @@ fn should_update() -> Result<bool, Errors> {
     let metadata = fs::metadata(data_local).map_err(|_e| Errors::CanNotReadMetaData)?;
 
     if let Ok(time) = metadata.accessed() {
-        return time.elapsed().map_or(Ok(true), |elapsed| {
+        time.elapsed().map_or(Ok(true), |elapsed| {
             Ok(elapsed > Duration::from_secs(60 * 60 * 24 * 7))
-        });
+        })
     } else {
-        return Ok(true);
+        Ok(true)
     }
 }
 
@@ -117,7 +114,8 @@ fn read_dictionary() -> Vec<String> {
         return File::open(data_local)
             .map(|mut file| {
                 let mut content = String::new();
-                file.read_to_string(&mut content);
+                file.read_to_string(&mut content)
+                    .expect("can not read dictionary file");
                 content
             })
             .map(|content| {
@@ -137,7 +135,7 @@ fn read_dictionary() -> Vec<String> {
             })
             .unwrap_or_default();
     }
-    return Vec::new();
+    Vec::new()
 }
 
 struct GuessHistory {
@@ -165,24 +163,24 @@ enum Errors {
 impl GuessHistory {
     pub fn new(target: String, wordle_day: u64, dictionary: Vec<String>) -> Self {
         GuessHistory {
-            target: target,
+            target,
             guesses: Vec::new(),
             standart_font: FIGfont::standand().unwrap(),
-            wordle_day: wordle_day,
-            dictionary: dictionary,
+            wordle_day,
+            dictionary,
         }
     }
 
     pub fn add_guess(&mut self, new_guess: String) -> Result<bool, Errors> {
         if new_guess.chars().count() != 5 {
-            return Err(Errors::InvalidGuessLength);
+            Err(Errors::InvalidGuessLength)
         } else if self.guesses.len() > 5 {
-            return Err(Errors::GuessLimitExceeded);
+            Err(Errors::GuessLimitExceeded)
         } else if !self.dictionary.contains(&new_guess) {
-            return Err(Errors::NotInDictionary);
+            Err(Errors::NotInDictionary)
         } else {
             self.guesses.push(new_guess);
-            return Ok(true);
+            Ok(true)
         }
     }
 
@@ -214,7 +212,7 @@ impl GuessHistory {
     }
 
     pub fn get_colors_index(&self, index: usize) -> Result<Vec<Color>, Errors> {
-        return GuessHistory::get_colors(&self.target, &self.guesses[index]);
+        GuessHistory::get_colors(&self.target, &self.guesses[index])
     }
 
     fn get_colors(target: &str, needle: &str) -> Result<Vec<Color>, Errors> {
@@ -222,7 +220,7 @@ impl GuessHistory {
             || target.chars().count() != 5
             || needle.chars().count() != 5
         {
-            return Err(Errors::LengthMismatch);
+            Err(Errors::LengthMismatch)
         } else {
             let mut result = Vec::new();
             let needle_graphemes =
@@ -235,7 +233,7 @@ impl GuessHistory {
                     .enumerate()
                     .filter(|(_tindex, &tval)| tval == c)
                     .collect();
-                if matches.len() > 0 {
+                if !matches.is_empty() {
                     if matches.iter().any(|(match_index, _)| *match_index == index) {
                         result.push(Color::Rgb {
                             r: 173,
@@ -257,7 +255,7 @@ impl GuessHistory {
                     });
                 }
             }
-            return Ok(result);
+            Ok(result)
         }
     }
 }
