@@ -214,7 +214,7 @@ impl GuessHistory {
     }
 
     pub fn is_failed(&self) -> bool {
-        self.guesses.len() == 6
+        !self.is_won()
     }
 
     pub fn get_colors_index(&self, index: usize) -> Result<Vec<Color>, Errors> {
