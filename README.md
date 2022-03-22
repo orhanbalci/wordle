@@ -1,7 +1,7 @@
 # wordle
 Konut satırında wordle oyna
 
-
+```
 Yeni tahmin >
 diniş
 ╭──────────┬──────┬──────────┬──────┬──────────────╮
@@ -48,3 +48,5 @@ diniş
 Tebrikler kelimeyi doğru tahmin ettiniz
 diniş: "Dinme işi"
 Wordle 49 5/6
+```
+
