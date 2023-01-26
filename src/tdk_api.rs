@@ -1,7 +1,7 @@
 use anyhow::Result;
 
 pub fn meaning(word: &str) -> Result<String> {
-    let body = reqwest::blocking::get(format!("http://sozluk.gov.tr/gts?ara={}", word))?.text()?;
+    let body = reqwest::blocking::get(format!("https://sozluk.gov.tr/gts?ara={}", word))?.text()?;
     let v: serde_json::Value = serde_json::from_str(&body)?;
     let result = v
         .get(0)

@@ -35,7 +35,8 @@ fn main() {
                     println!(
                         "{}: {}",
                         &todays_puzzle.word,
-                        tdk_api::meaning(&todays_puzzle.word).unwrap_or_default()
+                        tdk_api::meaning(&todays_puzzle.word)
+                            .unwrap_or("TDK sozluk aramasında hata oluştu.".into())
                     );
                     gh.print_statistics();
                 }
