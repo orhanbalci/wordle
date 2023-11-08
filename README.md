@@ -1,5 +1,5 @@
 # wordle
-Konut satırında wordle oyna
+Komut satırında wordle oyna
 
 ```
 Yeni tahmin >
